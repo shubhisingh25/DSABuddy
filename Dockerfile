@@ -1,26 +1,13 @@
-# -------- Build Stage --------
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+# Use an official Maven + JDK image
+FROM maven:3.9.5-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# Copy pom.xml and download dependencies first (faster rebuilds)
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
-# Copy the rest of the project
 COPY . .
+RUN mvn clean install -DskipTests
 
-# Build the Spring Boot JAR (skip tests for faster CI/CD)
-RUN mvn clean package -DskipTests
-
-# -------- Runtime Stage --------
-FROM openjdk:17-jdk-slim
+# Use JDK for running the app
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
-
-# Copy built JAR from build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose Spring Boot port
-EXPOSE 8080
-
-# Run the app
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
