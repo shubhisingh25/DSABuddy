@@ -5,157 +5,177 @@
     <title>DSA Topics | DSA Buddy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         :root {
             --primary: #6366f1;
-            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
             --secondary: #8b5cf6;
             --accent: #ec4899;
             --dark: #1e293b;
             --light: #f8fafc;
+            --gray: #94a3b8;
         }
         
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
             color: var(--dark);
-            line-height: 1.6;
+            overflow-x: hidden;
         }
         
-        /* Fluid Header */
-        .fluid-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 5rem 0;
-            clip-path: ellipse(100% 60% at 50% 30%);
-            margin-bottom: -3rem;
+        /* Navbar styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        /* Topic Items */
-        .topic-list {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-        
-        .topic-item {
-            display: flex;
-            align-items: center;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
             position: relative;
             overflow: hidden;
         }
         
-        .topic-item::before {
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.3)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>') no-repeat;
+            background-size: 30% 30%;
+            opacity: 0.2;
+            transform: rotate(30deg);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Topic Cards */
+        .topic-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+            background: white;
+            position: relative;
+            height: 100%;
+        }
+        
+        .topic-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 4px;
-            height: 100%;
+            height: 0;
             background: linear-gradient(to bottom, var(--primary), var(--secondary));
-            transition: width 0.3s ease;
+            transition: height 0.4s ease;
         }
         
-        .topic-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
+        .topic-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         
-        .topic-item:hover::before {
-            width: 8px;
+        .topic-card:hover::before {
+            height: 100%;
         }
         
         .topic-icon {
             font-size: 2rem;
-            margin-right: 2rem;
-            color: var(--primary);
-            min-width: 60px;
-            text-align: center;
-        }
-        
-        .topic-content {
-            flex: 1;
-        }
-        
-        .topic-name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-        
-        .topic-category {
-            display: inline-block;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        
-        .topic-desc {
-            color: #64748b;
-            margin-bottom: 1.5rem;
-        }
-        
-        .practice-btn {
-            display: inline-flex;
-            align-items: center;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .category-badge {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary-dark);
             font-weight: 500;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+        }
+        
+        /* Practice Button */
+        .practice-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .practice-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
         }
         
         .practice-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-            color: white;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
         }
         
-        .btn-icon {
-            margin-left: 0.5rem;
-            transition: transform 0.3s ease;
+        .practice-btn:hover::after {
+            left: 100%;
         }
         
-        .practice-btn:hover .btn-icon {
-            transform: translateX(3px);
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
         }
         
-        /* Responsive */
+        .floating-1 {
+            top: 20%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .topic-item {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem;
+            .hero-section {
+                padding: 3rem 0;
             }
             
-            .topic-icon {
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-            
-            .fluid-header {
-                clip-path: ellipse(120% 60% at 50% 30%);
-                padding: 4rem 0;
+            .hero-section h1 {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -163,38 +183,114 @@
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
     
-    <!-- Fluid Header -->
-    <div class="fluid-header">
-        <div class="header-content">
-            <h1 class="display-4 fw-bold mb-3">
-                <span th:text="${category != null} ? ${category : 'DSA Topics'}"></span>
-            </h1>
-            <p class="lead mb-4" style="max-width: 600px; margin: 0 auto;">
-                Master data structures and algorithms through interactive learning paths
-            </p>
-            <a href="#topics" class="btn btn-light btn-lg rounded-pill px-4">
-                <i class="bi bi-arrow-down me-2"></i> Explore Topics
-            </a>
+    <!-- Hero Section -->
+    <section class="hero-section py-5">
+        <div class="floating-element floating-1"></div>
+        <div class="floating-element floating-2"></div>
+        
+        <div class="container py-5 hero-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown" style="color: var(--primary-dark);">
+                        <span th:text="${category != null} ? ${category} : 'Master DSA Concepts'"></span>
+                    </h1>
+                    <p class="fs-5 text-dark mb-5 animate__animated animate__fadeIn animate__delay-1s">
+                        Accelerate your coding journey with comprehensive learning paths for all key<br>
+                        Data Structures and Algorithms concepts.
+                    </p>
+                    <a href="#topics" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow animate__animated animate__fadeInUp animate__delay-1s" 
+                       style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); font-weight: 500;">
+                        <i class="bi bi-journal-code me-2"></i> Explore Topics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Topics Section -->
+    <div class="container py-5 my-4" id="topics">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold mb-3" style="color: var(--primary-dark);">Structured Learning Paths</h2>
+                <p class="text-muted">Select a topic to dive deep with curated resources, practice problems, and visual explanations</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" th:each="topic : ${topics}">
+                <div class="topic-card card h-100 shadow-sm animate__animated animate__fadeInUp">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-code-square topic-icon me-3"></i>
+                            <div>
+                                <h4 class="mb-0 fw-bold" th:text="${topic.name}"></h4>
+                                <span class="badge category-badge rounded-pill mt-2" th:text="${topic.category}"></span>
+                            </div>
+                        </div>
+                        <p class="card-text text-muted mb-4" th:text="${topic.definition}"></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a th:href="@{/topics/{name}(name=${topic.name})}" class="btn practice-btn text-white">
+                                Start Learning <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                            <span class="text-muted small"><i class="bi bi-collection me-1"></i> 15+ problems</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Topics List -->
-    <div class="topic-list" id="topics">
-        <div th:each="topic : ${topics}" class="topic-item">
-            <div class="topic-icon">
-                <i class="bi bi-code-square"></i>
-            </div>
-            <div class="topic-content">
-                <div class="topic-category" th:text="${topic.category}"></div>
-                <h3 class="topic-name" th:text="${topic.name}"></h3>
-                <p class="topic-desc" th:text="${topic.definition}"></p>
-                <a th:href="@{/topics/{name}(name=${topic.name})}" class="practice-btn">
-                    Start Learning <i class="bi bi-arrow-right btn-icon"></i>
-                </a>
+    <!-- Stats Section -->
+    <div class="bg-white py-5 my-5">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-md-3">
+                    <div class="p-4 rounded-3 shadow-sm bg-light">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">150+</h3>
+                        <p class="text-muted mb-0">Topics Covered</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-4 rounded-3 shadow-sm bg-light">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">1000+</h3>
+                        <p class="text-muted mb-0">Practice Problems</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-4 rounded-3 shadow-sm bg-light">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">85%</h3>
+                        <p class="text-muted mb-0">Success Rate</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-4 rounded-3 shadow-sm bg-light">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">24/7</h3>
+                        <p class="text-muted mb-0">Support Available</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const topicCards = document.querySelectorAll('.topic-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__fadeInUp');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            topicCards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
