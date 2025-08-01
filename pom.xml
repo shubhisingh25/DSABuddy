@@ -78,11 +78,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.MySearchEnginee</groupId>
-			<artifactId>MySearchEnginee</artifactId>
-			<version>1.0</version>
-		</dependency>
+		
 	</dependencies>
 
 	<build>
