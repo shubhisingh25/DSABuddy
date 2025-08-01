@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - DSA Buddy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{../navbar :: navbar}"></div>
+
+<!-- Main Container -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+            <div class="card shadow-lg">
+                <div class="row g-0">
+                    <!-- Left Info Box -->
+                    <div class="col-lg-6 d-none d-lg-block bg-primary text-white p-5">
+                        <div class="mb-5">
+                            <h1 class="fw-bold mb-4">Start Your DSA Journey</h1>
+                            <p class="lead mb-4">Join thousands of learners mastering Data Structures & Algorithms with our proven system.</p>
+                            
+                            <ul class="list-unstyled">
+                                <li class="bg-white bg-opacity-10 p-3 rounded-3 mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-road text-warning fa-lg mt-1 me-3"></i>
+                                        <div>
+                                            <h5 class="mb-1">Structured Roadmap</h5>
+                                            <p class="small mb-0">Follow our step-by-step learning path</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="bg-white bg-opacity-10 p-3 rounded-3 mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-chart-line text-warning fa-lg mt-1 me-3"></i>
+                                        <div>
+                                            <h5 class="mb-1">Track Progress</h5>
+                                            <p class="small mb-0">Visualize your improvement daily</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="bg-white bg-opacity-10 p-3 rounded-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-lightbulb text-warning fa-lg mt-1 me-3"></i>
+                                        <div>
+                                            <h5 class="mb-1">Smart Practice</h5>
+                                            <p class="small mb-0">Get personalized problem recommendations</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            
+                            <div class="mt-5 pt-3">
+                                <div class="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                    <div class="bg-white bg-opacity-10 rounded-circle p-3 me-3">
+                                        <i class="fas fa-medal text-warning fa-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Trusted by 50,000+ coders</h5>
+                                        <p class="small mb-0">Join our thriving community</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <div class="col-lg-6 p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold text-primary mb-2">Create Account</h2>
+                            <p class="text-muted">Join DSA Buddy in 30 seconds</p>
+                        </div>
+
+                        <!-- Error/Success Messages -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert" th:text="${error}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert" th:text="${message}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Form -->
+                        <form th:action="@{/do-register}" th:object="${user}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-user text-muted"></i>
+                                    </span>
+                                    <input type="text" th:field="*{name}" class="form-control" placeholder="John Doe" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-envelope text-muted"></i>
+                                    </span>
+                                    <input type="email" th:field="*{email}" class="form-control" placeholder="your@email.com" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-lock text-muted"></i>
+                                    </span>
+                                    <input type="password" th:field="*{password}" class="form-control" placeholder="Enter your password" required>
+                                </div>
+                                <small class="text-muted">At least 8 characters</small>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i> Create Account
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">Already have an account? 
+                                <a href="/signin" class="text-decoration-none fw-bold text-primary">Sign in</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                <h5 class="mb-3">DSA Buddy</h5>
+                <p class="mb-0">Your companion in mastering Data Structures and Algorithms.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <h5 class="mb-3">Connect with Shubhi</h5>
+                <a href="https://www.linkedin.com/in/shubhi" class="text-white mx-2"><i class="fab fa-linkedin fa-lg"></i></a>
+                <a href="https://github.com/shubhi" class="text-white mx-2"><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://twitter.com/shubhi" class="text-white mx-2"><i class="fab fa-twitter fa-lg"></i></a>
+            </div>
+        </div>
+        <hr class="my-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-0 small">&copy; 2025 DSA Buddy. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS + Icons -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

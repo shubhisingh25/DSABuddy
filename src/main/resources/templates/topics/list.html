@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA Topics | DSA Buddy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Fluid Header */
+        .fluid-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 5rem 0;
+            clip-path: ellipse(100% 60% at 50% 30%);
+            margin-bottom: -3rem;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        /* Topic Items */
+        .topic-list {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .topic-item {
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .topic-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .topic-item:hover::before {
+            width: 8px;
+        }
+        
+        .topic-icon {
+            font-size: 2rem;
+            margin-right: 2rem;
+            color: var(--primary);
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .topic-content {
+            flex: 1;
+        }
+        
+        .topic-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .topic-category {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .topic-desc {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        
+        .practice-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(99, 102, 241, 0.2);
+        }
+        
+        .practice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+            color: white;
+        }
+        
+        .btn-icon {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .practice-btn:hover .btn-icon {
+            transform: translateX(3px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .topic-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            
+            .topic-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .fluid-header {
+                clip-path: ellipse(120% 60% at 50% 30%);
+                padding: 4rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <!-- Fluid Header -->
+    <div class="fluid-header">
+        <div class="header-content">
+            <h1 class="display-4 fw-bold mb-3">
+                <span th:text="${category != null} ? ${category : 'DSA Topics'}"></span>
+            </h1>
+            <p class="lead mb-4" style="max-width: 600px; margin: 0 auto;">
+                Master data structures and algorithms through interactive learning paths
+            </p>
+            <a href="#topics" class="btn btn-light btn-lg rounded-pill px-4">
+                <i class="bi bi-arrow-down me-2"></i> Explore Topics
+            </a>
+        </div>
+    </div>
+
+    <!-- Topics List -->
+    <div class="topic-list" id="topics">
+        <div th:each="topic : ${topics}" class="topic-item">
+            <div class="topic-icon">
+                <i class="bi bi-code-square"></i>
+            </div>
+            <div class="topic-content">
+                <div class="topic-category" th:text="${topic.category}"></div>
+                <h3 class="topic-name" th:text="${topic.name}"></h3>
+                <p class="topic-desc" th:text="${topic.definition}"></p>
+                <a th:href="@{/topics/{name}(name=${topic.name})}" class="practice-btn">
+                    Start Learning <i class="bi bi-arrow-right btn-icon"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

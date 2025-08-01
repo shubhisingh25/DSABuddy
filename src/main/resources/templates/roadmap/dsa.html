@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DSA Roadmap | DSA Buddy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5f72be;
+            --secondary: #9b23ea;
+            --purple: #6f42c1;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .roadmap-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .roadmap-stage {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .roadmap-stage:hover {
+            transform: translateX(5px);
+        }
+        
+        .roadmap-stage:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            left: 1.35rem;
+            top: 3rem;
+            bottom: -3rem;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        .stage-marker {
+            position: absolute;
+            left: 0;
+            width: 2.8rem;
+            height: 2.8rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+        
+        .stage-card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .stage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stage-header {
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .topic-badge {
+            transition: all 0.2s;
+            padding: 0.5rem 0.8rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .topic-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+        }
+        
+        .progress-tracker {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: width 0.6s ease;
+        }
+        
+        .resource-card {
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(95, 114, 190, 0.1);
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .estimated-time {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .bg-purple {
+            background-color: var(--purple) !important;
+        }
+        
+        .text-purple {
+            color: var(--purple) !important;
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .btn-gradient:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(95, 114, 190, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container py-4">
+        <!-- Hero Section -->
+        <div class="hero-section p-5 mb-5 position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-8 position-relative z-index-1">
+                    <h1 class="display-5 fw-bold mb-3">DSA Learning Roadmap</h1>
+                    <p class="lead mb-4" style="max-width: 700px;">
+                        A comprehensive step-by-step guide to master Data Structures and Algorithms from basics to advanced concepts
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#roadmap" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-map-marked-alt me-2"></i> Explore Roadmap
+                        </a>
+                        <a href="#resources" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-book-open me-2"></i> Learning Resources
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-none d-lg-block position-relative z-index-1">
+                    <img src="https://img.icons8.com/color/300/000000/data-configuration.png" alt="DSA Illustration" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Roadmap Tabs -->
+        <ul class="nav nav-pills mb-4" id="roadmapTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab">
+                    <i class="fas fa-list-ul me-2"></i> Full Roadmap
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="beginner-tab" data-bs-toggle="pill" data-bs-target="#beginner" type="button" role="tab">
+                    <i class="fas fa-baby me-2"></i> Learning resources
+                    
+                </button>
+            </li>
+           
+        </ul>
+
+    <!-- Roadmap Content -->
+    <div class="tab-content" id="roadmapTabsContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            <div class="roadmap-container" id="roadmap">
+                <!-- Stage 1 -->
+                <div class="roadmap-stage">
+                    <div class="stage-marker bg-primary">1</div>
+                    <div class="stage-card card shadow-sm mb-4">
+                        <div class="stage-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Foundation Phase</h4>
+                            <span class="estimated-time">
+                                <i class="fas fa-clock me-1"></i> 2-3 weeks
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-muted mb-4">
+                                Build your fundamental understanding of algorithms, problem-solving approaches, and computational complexity.
+                            </p>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" class="topic-badge bg-primary bg-opacity-10 text-primary">
+                                    <i class="fas fa-stopwatch"></i> Time Complexity
+                                </a>
+                                <a href="#" class="topic-badge bg-primary bg-opacity-10 text-primary">
+                                    <i class="fas fa-memory"></i> Space Complexity
+                                </a>
+                                <a href="#" class="topic-badge bg-primary bg-opacity-10 text-primary">
+                                    <i class="fas fa-chart-line"></i> Big-O Notation
+                                </a>
+                                <a href="#" class="topic-badge bg-primary bg-opacity-10 text-primary">
+                                    <i class="fas fa-sitemap"></i> Recursion
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2 -->
+                <div class="roadmap-stage">
+                    <div class="stage-marker bg-success">2</div>
+                    <div class="stage-card card shadow-sm mb-4">
+                        <div class="stage-header bg-success bg-opacity-10 d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Linear Data Structures</h4>
+                            <span class="estimated-time">
+                                <i class="fas fa-clock me-1"></i> 4-6 weeks
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-muted mb-4">
+                                Master sequential data organization methods that form the building blocks of most programs.
+                            </p>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" class="topic-badge bg-success bg-opacity-10 text-success">
+                                    <i class="fas fa-th-list"></i> Arrays
+                                </a>
+                                <a href="#" class="topic-badge bg-success bg-opacity-10 text-success">
+                                    <i class="fas fa-font"></i> Strings
+                                </a>
+                                <a href="#" class="topic-badge bg-success bg-opacity-10 text-success">
+                                    <i class="fas fa-link"></i> Linked Lists
+                                </a>
+                                <a href="#" class="topic-badge bg-success bg-opacity-10 text-success">
+                                    <i class="fas fa-layer-group"></i> Stacks
+                                </a>
+                                <a href="#" class="topic-badge bg-success bg-opacity-10 text-success">
+                                    <i class="fas fa-people-arrows"></i> Queues
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3 -->
+                <div class="roadmap-stage">
+                    <div class="stage-marker bg-warning">3</div>
+                    <div class="stage-card card shadow-sm mb-4">
+                        <div class="stage-header bg-warning bg-opacity-10 d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Non-Linear Structures</h4>
+                            <span class="estimated-time">
+                                <i class="fas fa-clock me-1"></i> 5-7 weeks
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-muted mb-4">
+                                Explore hierarchical and network data relationships that model real-world scenarios.
+                            </p>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" class="topic-badge bg-warning bg-opacity-10 text-warning">
+                                    <i class="fas fa-tree"></i> Trees
+                                </a>
+                                <a href="#" class="topic-badge bg-warning bg-opacity-10 text-warning">
+                                    <i class="fas fa-code-branch"></i> Binary Trees
+                                </a>
+                                <a href="#" class="topic-badge bg-warning bg-opacity-10 text-warning">
+                                    <i class="fas fa-search"></i> BST
+                                </a>
+                                <a href="#" class="topic-badge bg-warning bg-opacity-10 text-warning">
+                                    <i class="fas fa-sitemap"></i> Heaps
+                                </a>
+                                <a href="#" class="topic-badge bg-warning bg-opacity-10 text-warning">
+                                    <i class="fas fa-project-diagram"></i> Graphs
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4 -->
+                <div class="roadmap-stage">
+                    <div class="stage-marker bg-info">4</div>
+                    <div class="stage-card card shadow-sm mb-4">
+                        <div class="stage-header bg-info bg-opacity-10 d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Core Algorithms</h4>
+                            <span class="estimated-time">
+                                <i class="fas fa-clock me-1"></i> 4-5 weeks
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-muted mb-4">
+                                Essential algorithms that form the backbone of efficient problem solving in computer science.
+                            </p>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" class="topic-badge bg-info bg-opacity-10 text-info">
+                                    <i class="fas fa-sort-amount-down"></i> Sorting
+                                </a>
+                                <a href="#" class="topic-badge bg-info bg-opacity-10 text-info">
+                                    <i class="fas fa-search"></i> Searching
+                                </a>
+                                <a href="#" class="topic-badge bg-info bg-opacity-10 text-info">
+                                    <i class="fas fa-fingerprint"></i> Hashing
+                                </a>
+                                <a href="#" class="topic-badge bg-info bg-opacity-10 text-info">
+                                    <i class="fas fa-route"></i> Graph Traversals
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-30">
+      <div class="roadmap-stage">
+        <div class="stage-marker bg-danger">5</div>
+        <div class="stage-card card shadow-sm mb-5">
+          <div class="stage-header bg-danger bg-opacity-10 d-flex justify-content-between align-items-center px-4 py-3 rounded-top">
+            <h4 class="mb-0">Advanced Concepts</h4>
+            <span class="estimated-time">
+              <i class="fas fa-clock me-1"></i> 6-8 weeks
+            </span>
+          </div>
+          <div class="card-body px-4 py-3">
+            <p class="card-text text-muted mb-4">
+              Complex problem-solving techniques frequently asked in technical interviews at top companies.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="#" class="topic-badge bg-danger bg-opacity-10 text-danger">
+                <i class="fas fa-undo"></i> Backtracking
+              </a>
+              <a href="#" class="topic-badge bg-danger bg-opacity-10 text-danger">
+                <i class="fas fa-chess-board"></i> Dynamic Programming
+              </a>
+              <a href="#" class="topic-badge bg-danger bg-opacity-10 text-danger">
+                <i class="fas fa-coins"></i> Greedy Algorithms
+              </a>
+              <a href="#" class="topic-badge bg-danger bg-opacity-10 text-danger">
+                <i class="fas fa-cut"></i> Divide & Conquer
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+               
+
+                <!-- Stage 6 -->
+                <div class="roadmap-stage">
+                    <div class="stage-marker bg-purple">6</div>
+                    <div class="stage-card card shadow-sm mb-4">
+                        <div class="stage-header bg-purple bg-opacity-10 d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Special Topics</h4>
+                            <span class="estimated-time">
+                                <i class="fas fa-clock me-1"></i> 3-4 weeks
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-muted mb-4">
+                                Additional important concepts that give you an edge in competitive programming and specialized domains.
+                            </p>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" class="topic-badge bg-purple bg-opacity-10 text-white">
+                                    <i class="fas fa-memory"></i> Bit Manipulation
+                                </a>
+                                <a href="#" class="topic-badge bg-purple bg-opacity-10 text-white">
+                                    <i class="fas fa-tree"></i> Tries
+                                </a>
+                                <a href="#" class="topic-badge bg-purple bg-opacity-10 text-white">
+                                    <i class="fas fa-chart-bar"></i> Segment Trees
+                                </a>
+                                <a href="#" class="topic-badge bg-purple bg-opacity-10 text-white">
+                                    <i class="fas fa-square-root-alt"></i> Math for DSA
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+            <!-- Other tab panes would go here -->
+            <div class="tab-pane fade" id="beginner" role="tabpanel" aria-labelledby="beginner-tab">
+                <!-- Beginner content would go here -->
+            </div>
+            <div class="tab-pane fade" id="intermediate" role="tabpanel" aria-labelledby="intermediate-tab">
+                <!-- Intermediate content would go here -->
+            </div>
+            <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+                <!-- Advanced content would go here -->
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="mt-5 pt-4" id="resources">
+            <h3 class="fw-bold mb-4">
+                <i class="fas fa-book me-2"></i> Recommended Learning Resources
+            </h3>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="resource-card card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <div class="timeline-icon me-3">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Books</h5>
+                                    <p class="text-muted small">Comprehensive DSA textbooks</p>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Introduction to Algorithms</strong> - Cormen (The CLRS Bible)
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Algorithm Design Manual</strong> - Skiena (Practical approach)
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Cracking the Coding Interview</strong> - McDowell (Interview prep)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="resource-card card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <div class="timeline-icon me-3">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Courses</h5>
+                                    <p class="text-muted small">Structured video learning</p>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Algorithm Part I & II</strong> - Princeton (Coursera)
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Data Structures in Java</strong> - UCSD (Coursera)
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Master the Coding Interview</strong> - Andrei Neagoie (Udemy)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="resource-card card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <div class="timeline-icon me-3">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Practice Platforms</h5>
+                                    <p class="text-muted small">Hands-on coding practice</p>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>LeetCode</strong> - Interview preparation
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>HackerRank</strong> - Beginner friendly
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Codeforces</strong> - Competitive programming
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="resource-card card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <div class="timeline-icon me-3">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Tools & Visualizations</h5>
+                                    <p class="text-muted small">Interactive learning aids</p>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>VisuAlgo</strong> - Algorithm visualizations
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>Big-O Cheatsheet</strong> - Complexity reference
+                                </li>
+                                <li class="list-group-item border-0 px-0 py-2 small">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <strong>DSA Playground</strong> - Code and visualize
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Plan Section -->
+        <div class="mt-5 pt-4">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-md-6 bg-light">
+                        <div class="p-4 p-md-5">
+                            <h3 class="fw-bold mb-4">
+                                <i class="fas fa-calendar-alt me-2"></i> 3-Month Study Plan
+                            </h3>
+                            <p class="text-muted mb-4">
+                                Follow this structured plan to master DSA in just 3 months with daily practice.
+                            </p>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-white">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Month 1: Fundamentals</h6>
+                                            <p class="small text-muted mb-0">Complexity analysis, arrays, strings, linked lists</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-primary">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Month 2: Core Structures</h6>
+                                            <p class="small text-muted mb-0">Stacks, queues, trees, graphs, sorting</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-primary">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Month 3: Advanced Topics</h6>
+                                            <p class="small text-muted mb-0">DP, backtracking, greedy algorithms, special topics</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="#" class="btn btn-gradient mt-3 px-4">
+                                <i class="fas fa-download me-2"></i> Download Full Plan
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 bg-warning
+                     bg-opacity-5">
+                        <div class="p-4 p-md-5">
+                            <h3 class="fw-bold mb-4">
+                                <i class="fas fa-trophy me-2"></i> Pro Tips
+                            </h3>
+                            <div class="mb-4">
+                                <h6 class="d-flex align-items-center mb-3">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary me-2">1</span>
+                                    Consistency is Key
+                                </h6>
+                                <p class="small text-muted ps-4">
+                                    Practice daily, even if just 1 problem. Regular practice builds intuition.
+                                </p>
+                            </div>
+                            <div class="mb-4">
+                                <h6 class="d-flex align-items-center mb-3">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary me-2">2</span>
+                                    Understand Patterns
+                                </h6>
+                                <p class="small text-muted ps-4">
+                                    Focus on problem-solving patterns rather than memorizing solutions.
+                                </p>
+                            </div>
+                            <div class="mb-4">
+                                <h6 class="d-flex align-items-center mb-3">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary me-2">3</span>
+                                    Time Yourself
+                                </h6>
+                                <p class="small text-muted ps-4">
+                                    Simulate interview conditions by timing your problem-solving sessions.
+                                </p>
+                            </div>
+                            <div class="">
+                                <h6 class="d-flex align-items-center mb-3">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary me-2">4</span>
+                                    Revise Regularly
+                                </h6>
+                                <p class="small text-muted ps-4">
+                                    Revisit solved problems weekly to reinforce your understanding.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple animation for roadmap stages
+        document.addEventListener('DOMContentLoaded', function() {
+            const stages = document.querySelectorAll('.roadmap-stage');
+            
+            stages.forEach((stage, index) => {
+                // Add delay based on index for staggered animation
+                stage.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
