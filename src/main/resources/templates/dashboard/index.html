@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>DSA Buddy Dashboard</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -27,80 +28,9 @@
       background-color: var(--light);
     }
 
-    .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, #2c3e50, #1a2533);
-      color: white;
-      height: 100vh;
-      position: fixed;
-      transition: all 0.3s;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    }
-
-    .sidebar-collapsed {
-      width: 80px;
-    }
-
-    .sidebar-collapsed .sidebar-text {
-      display: none;
-    }
-
-    .sidebar h3 {
-      font-weight: 700;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .sidebar a {
-      color: rgba(255,255,255,0.8);
-      padding: 0.75rem 1.5rem;
-      margin: 0.25rem 1rem;
-      border-radius: 0.25rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      transition: all 0.3s;
-    }
-
-    .sidebar a:hover, .sidebar a.active {
-      background: rgba(255,255,255,0.1);
-      color: white;
-      transform: translateX(5px);
-    }
-
-    .sidebar a i {
-      margin-right: 0.75rem;
-      width: 20px;
-      text-align: center;
-    }
-
     .main-content {
-      margin-left: 250px;
       padding: 2rem;
-      transition: all 0.3s;
-    }
-
-    .main-content-expanded {
-      margin-left: 80px;
-    }
-
-    .toggle-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
-      background: var(--primary);
-      color: white;
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      width: 100%;
     }
 
     .card-hover {
@@ -169,181 +99,94 @@
       background-color: var(--purple);
     }
 
+    /* Adjusted column widths */
+    .col-lg-8 {
+      flex: 0 0 70%;
+      max-width: 70%;
+    }
+    
+    .col-lg-4 {
+      flex: 0 0 30%;
+      max-width: 30%;
+    }
+
+    /* Wider cards */
+    .card {
+      width: 100%;
+    }
+
+    /* Full width stats cards */
+    .stats-card {
+      height: 100%;
+    }
+
     @media (max-width: 992px) {
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-      }
-      .main-content {
-        margin-left: 0;
-      }
-      .toggle-btn {
-        display: none;
+      .col-lg-8,
+      .col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Sidebar Toggle Button -->
-  <button class="toggle-btn" id="sidebarToggle">
-    <i class="fas fa-bars"></i>
-  </button>
+  <!-- Navbar -->
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <h3><i class="fas fa-code"></i> <span class="sidebar-text">DSA Buddy</span></h3>
-    <a href="#" class="active"><i class="fas fa-home"></i> <span class="sidebar-text">Dashboard</span></a>
-    <a th:href="@{/roadmap/dsa}"><i class="fas fa-map-signs"></i> <span class="sidebar-text">Roadmap</span></a>
-    <a th:href="@{/roadmap/java}"><i class="fab fa-java"></i> <span class="sidebar-text">Practice</span></a>
-    <a th:href="@{/topics/list}"><i class="fas fa-layer-group"></i> <span class="sidebar-text">Topics</span></a>
-  
-    
-    <!-- Show only if user is authenticated -->
-    <div class="mt-4 mx-3" th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{/logout}" method="post" class="d-inline">
-        <button type="submit" class="btn btn-sm btn-warning w-100">
-          <i class="fas fa-sign-out-alt me-1"></i> Logout
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Main Content -->
   <main class="main-content" id="mainContent">
     <!-- Welcome Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h2 class="fw-bold mb-1">Welcome back, <span class="text-primary" id="username">Coder</span>! 👋</h2>
-        <p class="text-muted" id="dailyQuote">"Success is the sum of small efforts repeated daily."</p>
+    <div class="d-flex flex-column p-4 bg-white rounded-4 mb-4 border border-2 border-primary-subtle shadow">
+      <div class="mb-3 position-relative">
+        <h2 class="fw-bold display-6 mb-2">
+          Welcome <span class="text-purple" th:text="${#authentication.principal.username} ?: 'Coder'">Coder</span>! 
+          <span class="animate__animated animate__waving">👋</span>
+        </h2>
       </div>
+    </div>
+  
+    <!-- Goals dropdown -->
+    <div class="mt-3 mb-4 goals-dropdown">
       <div class="dropdown">
-        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dailyGoalDropdown" data-bs-toggle="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle px-4 py-2 fs-5 fw-semibold" type="button" id="dailyGoalDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="fas fa-bullseye me-2"></i>Today's Goal
         </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#"><i class="far fa-check-circle text-success me-2"></i>Solve 1 problem</a></li>
-          <li><a class="dropdown-item" href="#"><i class="far fa-check-circle text-success me-2"></i>Learn 1 concept</a></li>
-          <li><a class="dropdown-item" href="#"><i class="far fa-circle text-muted me-2"></i>Revise 1 topic</a></li>
+        <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="dailyGoalDropdown">
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="far fa-check-circle text-success me-2"></i>Solve 1 problem
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="far fa-check-circle text-success me-2"></i>Learn 1 concept
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="far fa-circle text-muted me-2"></i>Revise 1 topic
+            </a>
+          </li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#"><i class="fas fa-plus-circle me-2"></i>Add custom goal</a></li>
+          <li class="dropdown-header text-muted">Add a goal</li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="fas fa-plus-circle me-2"></i>Add custom goal
+            </a>
+          </li>
         </ul>
       </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-4">
-      <div class="col-md-6 col-lg-3">
-        <div class="card problems-card text-white card-hover">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6 class="mb-1">Problems Solved</h6>
-                <h2 class="mb-0" id="problemsSolved">127</h2>
-                <small>+8 this week</small>
-              </div>
-              <div class="bg-white bg-opacity-20 rounded-circle p-3 d-flex align-items-center justify-content-center">
-                <i class="fas fa-check fa-lg"></i>
-              </div>
-            </div>
-            <div class="progress progress-thin mt-3 bg-white bg-opacity-20">
-              <div class="progress-bar bg-white" style="width: 65%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card streak-card text-white card-hover">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6 class="mb-1">Current Streak</h6>
-                <h2 class="mb-0" id="currentStreak">14 Days</h2>
-                <small>Don't break it!</small>
-              </div>
-              <div class="bg-white bg-opacity-20 rounded-circle p-3 d-flex align-items-center justify-content-center">
-                <i class="fas fa-fire fa-lg"></i>
-              </div>
-            </div>
-            <div class="progress progress-thin mt-3 bg-white bg-opacity-20">
-              <div class="progress-bar bg-white" style="width: 45%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card accuracy-card text-white card-hover">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6 class="mb-1">Accuracy</h6>
-                <h2 class="mb-0" id="accuracyRate">82%</h2>
-                <small>+5% this month</small>
-              </div>
-              <div class="bg-white bg-opacity-20 rounded-circle p-3 d-flex align-items-center justify-content-center">
-                <i class="fas fa-bullseye fa-lg"></i>
-              </div>
-            </div>
-            <div class="progress progress-thin mt-3 bg-white bg-opacity-20">
-              <div class="progress-bar bg-white" style="width: 82%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card topics-card text-white card-hover">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6 class="mb-1">Topics Mastered</h6>
-                <h2 class="mb-0" id="topicsMastered">18/50</h2>
-                <small>36% completed</small>
-              </div>
-              <div class="bg-white bg-opacity-20 rounded-circle p-3 d-flex align-items-center justify-content-center">
-                <i class="fas fa-star fa-lg"></i>
-              </div>
-            </div>
-            <div class="progress progress-thin mt-3 bg-white bg-opacity-20">
-              <div class="progress-bar bg-white" style="width: 36%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+   
 
-    <div class="row g-4">
-      <!-- Left Column -->
+    <div class="row">
+      <!-- Left Column (70% width) -->
       <div class="col-lg-8">
-        <!-- Daily Challenge -->
-        <div class="card card-hover mb-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="fw-bold mb-0"><i class="fas fa-calendar-day me-2 text-primary"></i>Today's Challenge</h5>
-              <span class="badge bg-danger">New</span>
-            </div>
-            <div class="alert alert-info">
-              <h6 class="fw-bold">Two Sum Problem</h6>
-              <p class="mb-2">Given an array of integers, return indices of the two numbers that add up to a specific target.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-primary">Arrays</span>
-                <div>
-                  <a href="https://leetcode.com/problems/two-sum/" target="_blank" class="btn btn-sm btn-primary me-2">
-                    <i class="fas fa-external-link-alt me-1"></i> Solve
-                  </a>
-                  <button class="btn btn-sm btn-outline-secondary" onclick="showHint()">
-                    <i class="fas fa-lightbulb me-1"></i> Hint
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Learning Path Recommendation -->
         <div class="card card-hover mb-4">
           <div class="card-body">
             <h5 class="fw-bold mb-3"><i class="fas fa-road me-2 text-primary"></i>Recommended Learning Path</h5>
-            <div class="progress mb-3" style="height: 8px;">
+            <div class="progress mb-3" style="height: 5px;">
               <div class="progress-bar bg-success" role="progressbar" style="width: 25%"></div>
               <div class="progress-bar bg-info" role="progressbar" style="width: 15%"></div>
               <div class="progress-bar bg-warning" role="progressbar" style="width: 10%"></div>
@@ -370,163 +213,81 @@
             </div>
           </div>
         </div>
-
-        <!-- DSA Resources -->
-        <div class="card card-hover mb-4">
+        
+        <!-- DSA Companion Section -->
+        <div class="card mb-4">
           <div class="card-body">
-            <h5 class="fw-bold mb-3"><i class="fas fa-book me-2 text-primary"></i>DSA Resources</h5>
-            <div class="alert alert-warning">
-              <i class="fas fa-info-circle me-2"></i> Follow this order for best results: CoderArmy → Love Babbar → Striver's Sheets->Leetcode 150->Leetcode blind 75
+            <div>
+              <h4 class="fw-bold mb-0">Your Personal DSA Companion</h4>
             </div>
+            
+            <div class="alert alert-info mb-3 mt-3 text-purple">
+              <i class="fas fa-lightbulb me-3 "></i> Making Data Structures & Algorithms Learning Easier
+            </div>
+            
+            <p class="mb-3">DSA Buddy is designed to help you master Data Structures and Algorithms through:</p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Structured learning paths</li>
+              <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Curated problem sets</li>
+              <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Personalized recommendations</li>
+            </ul>
+            <div class="alert alert-primary mt-3">
+              <i class="fas fa-lightbulb me-2"></i> Start with our <a th:href="@{/roadmap/dsa}">Roadmap</a> for guided learning!
+            </div>
+          </div>
+        </div>
+
+        <!-- Practice & Revise DSA Section -->
+        <div class="card card-hover mb-4 shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="fw-bold mb-3">
+                  <i class="fas fa-code-branch text-purple me-2"></i>Practice & Revise DSA
+                </h5>
+                <p class="text-muted mb-0 small">Sharpen your skills by solving, revising, and adding problems daily.</p>
+              </div>
+              <span class="badge bg-primary bg-opacity-10 text-primary fs-5 p-3 rounded-circle shadow-sm">
+                <i class="fas fa-laptop-code"></i>
+              </span>
+            </div>
+
             <div class="row g-3">
-              <!-- CoderArmy DSA Sheet -->
-              <div class="col-md-6">
-                <div class="card resource-card h-100">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                      <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
-                        <i class="fas fa-file-pdf"></i>
-                      </div>
-                      <div>
-                        <h6 class="mb-0 fw-bold">CoderArmy DSA Sheet</h6>
-                        <small class="text-muted">Beginner Friendly</small>
-                      </div>
-                    </div>
-                    <p class="small text-muted mb-3">Perfect starting point with 450+ fundamental problems</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <a href="https://codolio.com/question-tracker/sheet/code-army-sheet" target="_blank" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-download me-1"></i> View
-                      </a>
-                      <small class="text-muted">Start here</small>
-                    </div>
-                  </div>
+              <!-- Start Practice -->
+              <div class="col-md-4">
+                <div class="border p-3 rounded h-100 text-center bg-light">
+                  <i class="fas fa-play-circle text-success fs-3 mb-2"></i>
+                  <h6 class="fw-bold">Start your journey</h6>
+                  <p class="text-muted small mb-2">Pick a DSA topic and begin solving curated problems.</p>
+                  <a th:href="@{/roadmap/dsa}" class="btn btn-sm btn-outline-primary">Start Now</a>
+                </div>
+              </div>
+              
+              <!-- Revise Problems -->
+              <div class="col-md-4">
+                <div class="border p-3 rounded h-100 text-center bg-light">
+                  <i class="fas fa-sync-alt text-warning fs-3 mb-2"></i>
+                  <h6 class="fw-bold">Add new problem and Revise Problems</h6>
+                  <p class="text-muted small mb-2">View your solved problems and revise for consistency.</p>
+                   <a th:href="@{/roadmap/java}" class="btn btn-sm btn-outline-success">Revise</a>
                 </div>
               </div>
 
-              <!-- Love Babbar Sheet -->
-              <div class="col-md-6">
-                <div class="card resource-card h-100">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                      <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3">
-                        <i class="fas fa-file-pdf"></i>
-                      </div>
-                      <div>
-                        <h6 class="mb-0 fw-bold">Love Babbar Sheet</h6>
-                        <small class="text-muted">After 6 months</small>
-                      </div>
-                    </div>
-                    <p class="small text-muted mb-3">450+ intermediate problems to strengthen your skills</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <a href="https://drive.google.com/file/d/1FMdN_OCfOI0iAeDlqswCiC2DZzD4nPsb/view" target="_blank" class="btn btn-sm btn-outline-success">
-                        <i class="fas fa-download me-1"></i> Download
-                      </a>
-                      <small class="text-muted">Next step</small>
-                    </div>
-                  </div>
+              <!-- Add New Problem -->
+              <div class="col-md-4">
+                <div class="border p-3 rounded h-100 text-center bg-light">
+                  <i class="fas fa-plus-circle text-primary fs-3 mb-2"></i>
+                  <h6 class="fw-bold">All Resources</h6>
+                  <p class="text-muted small mb-2">Input a new problem link with difficulty to track it.</p>
+                  <a th:href="@{/user/topic/{topic}(topic='Basics')}"class="btn btn-sm btn-outline-primary">view</a>
                 </div>
               </div>
-
-              <!-- Striver's A2Z -->
-              <div class="col-md-6">
-                <div class="card resource-card h-100">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                      <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
-                        <i class="fas fa-file-alt"></i>
-                      </div>
-                      <div>
-                        <h6 class="mb-0 fw-bold">Striver's A2Z Sheet</h6>
-                        <small class="text-muted">After 1 year</small>
-                      </div>
-                    </div>
-                    <p class="small text-muted mb-3">Comprehensive advanced DSA course with video solutions</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/" target="_blank" class="btn btn-sm btn-outline-info">
-                        <i class="fas fa-external-link-alt me-1"></i> View
-                      </a>
-                      <small class="text-muted">Advanced</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Striver's 150 -->
-              <div class="col-md-6">
-                <div class="card resource-card h-100">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                      <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3">
-                        <i class="fas fa-file-alt"></i>
-                      </div>
-                      <div>
-                        <h6 class="mb-0 fw-bold">Striver's 150</h6>
-                        <small class="text-muted">Interview Prep</small>
-                      </div>
-                    </div>
-                    <p class="small text-muted mb-3">150 most asked coding interview problems</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <a href="https://takeuforward.org/interviews/strivers-sde-sheet-top-coding-interview-problems/" target="_blank" class="btn btn-sm btn-outline-warning">
-                        <i class="fas fa-external-link-alt me-1"></i> View
-                      </a>
-                      <small class="text-muted">Final Prep</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- LeetCode 150 -->
-<div class="col-md-6">
-  <div class="card resource-card h-100">
-    <div class="card-body">
-      <div class="d-flex align-items-center mb-2">
-        <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
-          <i class="fas fa-file-pdf"></i>
-        </div>
-        <div>
-          <h6 class="mb-0 fw-bold">LeetCode 150</h6>
-          <small class="text-muted">First 3 months</small>
-        </div>
-      </div>
-      <p class="small text-muted mb-3">150 essential problems to build coding fundamentals</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <a href="https://leetcode.com/problem-list/leetcode-150/" target="_blank" class="btn btn-sm btn-outline-primary">
-          <i class="fas fa-external-link-alt me-1"></i> View Problems
-        </a>
-        <small class="text-muted">Starting point</small>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- LeetCode Blind 75 -->
-<div class="col-md-6">
-  <div class="card resource-card h-100">
-    <div class="card-body">
-      <div class="d-flex align-items-center mb-2">
-        <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
-          <i class="fas fa-file-pdf"></i>
-        </div>
-        <div>
-          <h6 class="mb-0 fw-bold">LeetCode Blind 75</h6>
-          <small class="text-muted">After 3 months</small>
-        </div>
-      </div>
-      <p class="small text-muted mb-3">75 must-do problems for technical interview preparation</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <a href="https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions" target="_blank" class="btn btn-sm btn-outline-info">
-          <i class="fas fa-external-link-alt me-1"></i> View Problems
-        </a>
-        <small class="text-muted">Intermediate step</small>
-      </div>
-    </div>
-  </div>
-</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Column -->
+      <!-- Right Column (30% width) -->
       <div class="col-lg-4">
         <!-- Motivational Quote -->
         <div class="card quote-card mb-4">
@@ -570,85 +331,40 @@
             </div>
           </div>
         </div>
-<!-- Add this in the right column where there's empty space -->
-<div class="card card-hover mb-4">
-  <div class="card-body">
-    <h5 class="fw-bold mb-3"><i class="fas fa-lightbulb me-2 text-warning"></i>Quick DSA Tips</h5>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item d-flex align-items-center">
-        <i class="fas fa-check-circle text-success me-2"></i>
-        <span>Solve problems in this order: Understand → Brute Force → Optimize</span>
-      </li>
-      <li class="list-group-item d-flex align-items-center">
-        <i class="fas fa-check-circle text-success me-2"></i>
-        <span>Spend 20-30 minutes on a problem before looking at solutions</span>
-      </li>
-      <li class="list-group-item d-flex align-items-center">
-        <i class="fas fa-check-circle text-success me-2"></i>
-        <span>Revise solved problems after 3 days and 1 week</span>
-      </li>
-      <li class="list-group-item d-flex align-items-center">
-        <i class="fas fa-check-circle text-success me-2"></i>
-        <span>Focus on patterns, not just individual problems</span>
-      </li>
-    </ul>
-  </div>
-</div>
-       
 
-        <!-- Upcoming Contests -->
-        <div class="card card-hover">
+        <!-- Quick DSA Tips -->
+        <div class="card card-hover mb-4">
           <div class="card-body">
-            <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-primary"></i>Upcoming Contests</h5>
-            <div class="d-flex align-items-center mb-3">
-              <div class="bg-purple bg-opacity-10 text-purple rounded p-2 me-3">
-                <i class="fas fa-trophy"></i>
-              </div>
-              <div>
-                <h6 class="mb-0 fw-bold">LeetCode Weekly</h6>
-                <small class="text-muted">Tomorrow at 8:30 PM</small>
-              </div>
-            </div>
-            <div class="d-flex align-items-center mb-3">
-              <div class="bg-danger bg-opacity-10 text-danger rounded p-2 me-3">
-                <i class="fas fa-code"></i>
-              </div>
-              <div>
-                <h6 class="mb-0 fw-bold">Codeforces Div 3</h6>
-                <small class="text-muted">In 2 days</small>
-              </div>
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3">
-                <i class="fas fa-utensils"></i>
-              </div>
-              <div>
-                <h6 class="mb-0 fw-bold">CodeChef Lunchtime</h6>
-                <small class="text-muted">Next Sunday</small>
-              </div>
-            </div>
-            <a href="https://clist.by/" target="_blank" class="btn btn-sm btn-outline-purple w-100 mt-3">
-              <i class="fas fa-external-link-alt me-1"></i> View All Contests
-            </a>
+            <h5 class="fw-bold mb-3"><i class="fas fa-lightbulb me-2 text-purple"></i>Quick DSA Tips</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <span>Solve problems in this order: Understand → Brute Force → Optimize</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <span>Spend 20-30 minutes on a problem before looking at solutions</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <span>Revise solved problems after 3 days and 1 week</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <span>Focus on patterns, not just individual problems</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <span>Do not copy code from Chatgpt directly without understanding the code of Chatgpt</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-  <!-- Footer -->
-<footer class="text-center mt-5 pt-4 border-top">
-  <div class="d-flex justify-content-center gap-3 mb-3">
-    <a href="https://www.linkedin.com/in/shubhi-singh-151390359/" target="_blank" class="text-muted" title="LinkedIn Profile">
-      <i class="fab fa-linkedin"></i>
-    </a>
-    <a href="https://github.com/shubhisingh25" target="_blank" class="text-muted" title="GitHub Profile">
-      <i class="fab fa-github"></i>
-    </a>
+    <!-- Footer -->
    
-  </div>
-  <p class="text-muted small">Made  <i class="fas fa-heart text-danger"></i> by Shubhi Singh</p>
-  <p class="text-muted small mb-0">&copy; 2025 All rights reserved</p>
-</footer>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -668,14 +384,39 @@
       // Set daily quote
       changeQuote();
     });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const addGoalLink = document.querySelector(".dropdown-item[href='#']:has(.fa-plus-circle)");
 
-    // Toggle sidebar
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-      document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
-      document.getElementById('mainContent').classList.toggle('main-content-expanded');
-      this.innerHTML = document.getElementById('sidebar').classList.contains('sidebar-collapsed') ? 
-        '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
-    });
+        addGoalLink.addEventListener("click", function (event) {
+          event.preventDefault(); // stop default link behavior
+
+          const userGoal = prompt("Enter your custom goal:");
+          if (userGoal && userGoal.trim() !== "") {
+            const goalList = addGoalLink.closest(".dropdown-menu");
+
+            const newGoalItem = document.createElement("li");
+            newGoalItem.innerHTML = `
+              <div class="dropdown-item d-flex justify-content-between align-items-center">
+                <span><i class="far fa-check-circle text-info me-2"></i>${userGoal}</span>
+                <i class="fas fa-trash-alt text-danger delete-goal" style="cursor: pointer;"></i>
+              </div>
+            `;
+
+            goalList.insertBefore(newGoalItem, goalList.querySelector("li:nth-last-child(2)")); // above divider
+          }
+        });
+
+        // Delegate delete action to the dropdown
+        document.querySelector(".dropdown-menu").addEventListener("click", function (e) {
+          if (e.target.classList.contains("delete-goal")) {
+            const confirmDelete = confirm("Are you sure you want to delete this goal?");
+            if (confirmDelete) {
+              e.target.closest("li").remove();
+            }
+          }
+        });
+      });
 
     // Change motivational quote
     function changeQuote() {
