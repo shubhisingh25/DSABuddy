@@ -1,271 +1,537 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>DSA Topics | DSA Buddy</title>
+    <title>DSA Resources | DSA Buddy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #94a3b8;
+            --primary: #5f72be;
+            --secondary: #9b23ea;
         }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f1f5f9;
-            color: var(--dark);
-            overflow-x: hidden;
+      .hero-gradient {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    z-index: 0;
+}
+
+.hero-gradient::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.3); /* Adjust 0.2–0.5 for lightness */
+    z-index: 1;
+    pointer-events: none;
+}
+      
+        
+        .resource-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary);
         }
         
-        /* Navbar styling */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 200%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.3)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>') no-repeat;
-            background-size: 30% 30%;
-            opacity: 0.2;
-            transform: rotate(30deg);
-            z-index: 0;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Topic Cards */
-        .topic-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 12px;
-            overflow: hidden;
-            border: none;
-            background: white;
-            position: relative;
-            height: 100%;
-        }
-        
-        .topic-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 0;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-            transition: height 0.4s ease;
-        }
-        
-        .topic-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .topic-card:hover::before {
-            height: 100%;
-        }
-        
-        .topic-icon {
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .category-badge {
-            background-color: rgba(99, 102, 241, 0.1);
-            color: var(--primary-dark);
-            font-weight: 500;
-            padding: 0.35rem 0.75rem;
-            border-radius: 50px;
-        }
-        
-        /* Practice Button */
-        .practice-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 8px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+        .resource-item {
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            border-left: 4px solid var(--primary);
         }
         
-        .practice-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.6s ease;
+        .resource-item:hover {
+            background-color: rgba(95, 114, 190, 0.05);
+            transform: translateX(5px);
         }
         
-        .practice-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-        }
-        
-        .practice-btn:hover::after {
-            left: 100%;
-        }
-        
-        /* Floating Elements */
-        .floating-element {
-            position: absolute;
-            opacity: 0.1;
-            z-index: 0;
-        }
-        
-        .floating-1 {
-            top: 20%;
-            left: 5%;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .floating-2 {
-            bottom: 10%;
-            right: 5%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite 2s;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 3rem 0;
-            }
-            
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
+        .topic-badge {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
         }
     </style>
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
-    
+
     <!-- Hero Section -->
-    <section class="hero-section py-5">
-        <div class="floating-element floating-1"></div>
-        <div class="floating-element floating-2"></div>
-        
-        <div class="container py-5 hero-content">
+    <section class="hero-gradient text-white py-4">
+        <div class="container py-2">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
-                    <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown" style="color: var(--primary-dark);">
-                        <span th:text="${category != null} ? ${category} : 'Master DSA Concepts'"></span>
+                    <h1 class="display-5 fw-bold mb-3">
+                        Master DSA Concepts
                     </h1>
-                    <p class="fs-5 text-dark mb-5 animate__animated animate__fadeIn animate__delay-1s">
+                    <p class="fs-5 mb-4">
                         Accelerate your coding journey with comprehensive learning paths for all key<br>
                         Data Structures and Algorithms concepts.
                     </p>
-                    <a href="#topics" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow animate__animated animate__fadeInUp animate__delay-1s" 
-                       style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); font-weight: 500;">
-                        <i class="bi bi-journal-code me-2"></i> Explore Topics
-                    </a>
+                    <p class="text-white-50">Select a topic to dive deep with curated resources, practice problems, and visual explanations</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Topics Section -->
-    <div class="container py-5 my-4" id="topics">
-        <div class="row justify-content-center mb-5">
-            <div class="col-lg-8 text-center">
-                <h2 class="fw-bold mb-3" style="color: var(--primary-dark);">Structured Learning Paths</h2>
-                <p class="text-muted">Select a topic to dive deep with curated resources, practice problems, and visual explanations</p>
+    <!-- Main Content -->
+    <div class="container py-4">
+        <!-- Resources Section -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-body">
+                <h3 class="fw-bold mb-4"><i class="fas fa-book me-2 text-primary"></i> Recommended DSA Resources</h3>
+                <div class="alert alert-warning mb-4">
+                    <i class="fas fa-info-circle me-2"></i> Follow this order for best results: CoderArmy → Love Babbar → Striver's Sheets → Leetcode 150 → Leetcode blind 75
+                </div>
+                
+                <div class="row g-4">
+                    <!-- CoderArmy -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">CoderArmy DSA Sheet</h6>
+                                        <small class="text-muted">Beginner Friendly</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Perfect starting point with 450+ fundamental problems</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://codolio.com/question-tracker/sheet/code-army-sheet" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download me-1"></i> View
+                                    </a>
+                                    <small class="text-muted">Start here</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Love Babbar -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Love Babbar Sheet</h6>
+                                        <small class="text-muted">After 6 months</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">450+ intermediate problems to strengthen your skills</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://drive.google.com/file/d/1FMdN_OCfOI0iAeDlqswCiC2DZzD4nPsb/view" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-download me-1"></i> Download
+                                    </a>
+                                    <small class="text-muted">Next step</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Striver's A2Z -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Striver's A2Z Sheet</h6>
+                                        <small class="text-muted">After 1 year</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Comprehensive advanced DSA course with video solutions</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-external-link-alt me-1"></i> View
+                                    </a>
+                                    <small class="text-muted">Advanced</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Striver's 150 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Striver's 150</h6>
+                                        <small class="text-muted">Interview Prep</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">150 most asked coding interview problems</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://takeuforward.org/interviews/strivers-sde-sheet-top-coding-interview-problems/" target="_blank" class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-external-link-alt me-1"></i> View
+                                    </a>
+                                    <small class="text-muted">Final Prep</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- LeetCode 150 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">LeetCode 150</h6>
+                                        <small class="text-muted">First 3 months</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">150 essential problems to build coding fundamentals</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://leetcode.com/problem-list/leetcode-150/" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-external-link-alt me-1"></i> View Problems
+                                    </a>
+                                    <small class="text-muted">Starting point</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- LeetCode Blind 75 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">LeetCode Blind 75</h6>
+                                        <small class="text-muted">After 3 months</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">75 must-do problems for technical interview preparation</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://leetcode.com/discuss/general-discussion/460599/blind-75-leetcode-questions" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-external-link-alt me-1"></i> View Problems
+                                    </a>
+                                    <small class="text-muted">Intermediate step</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-4" th:each="topic : ${topics}">
-                <div class="topic-card card h-100 shadow-sm animate__animated animate__fadeInUp">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-4">
-                            <i class="bi bi-code-square topic-icon me-3"></i>
+    
+                
+                <!-- Books -->
+                <div class="mb-5">
+                    <h4 class="fw-bold border-bottom pb-2 mb-3"><i class="fas fa-book-open me-2 text-primary"></i> Recommended Books</h4>
+                    <div class="resource-item p-3 mb-3 rounded">
+                        <div class="d-flex">
+                            <i class="fas fa-book fa-lg text-primary mt-1 me-3"></i>
                             <div>
-                                <h4 class="mb-0 fw-bold" th:text="${topic.name}"></h4>
-                                <span class="badge category-badge rounded-pill mt-2" th:text="${topic.category}"></span>
+                                <h5 class="fw-bold mb-1">"Introduction to Algorithms" (CLRS)</h5>
+                                <p class="text-muted mb-2">The Bible of Algorithms - comprehensive theoretical coverage.</p>
+                                <a href="https://mitpress.mit.edu/books/introduction-algorithms-third-edition" target="_blank" class="btn btn-sm btn-outline-secondary">Book Info</a>
                             </div>
                         </div>
-                        <p class="card-text text-muted mb-4" th:text="${topic.definition}"></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a th:href="@{/topics/{name}(name=${topic.name})}" class="btn practice-btn text-white">
-                                Start Learning <i class="bi bi-arrow-right ms-2"></i>
-                            </a>
-                            <span class="text-muted small"><i class="bi bi-collection me-1"></i> 15+ problems</span>
+                    </div>
+                    <div class="resource-item p-3 mb-3 rounded">
+                        <div class="d-flex">
+                            <i class="fas fa-book fa-lg text-primary mt-1 me-3"></i>
+                            <div>
+                                <h5 class="fw-bold mb-1">"Algorithms" by Robert Sedgewick</h5>
+                                <p class="text-muted mb-2">Great for practical implementations in Java/C++.</p>
+                                <a href="https://algs4.cs.princeton.edu/home/" target="_blank" class="btn btn-sm btn-outline-secondary">Book Website</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Section -->
-    <div class="bg-white py-5 my-5">
-        <div class="container">
-            <div class="row g-4 text-center">
-                <div class="col-md-3">
-                    <div class="p-4 rounded-3 shadow-sm bg-light">
-                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">150+</h3>
-                        <p class="text-muted mb-0">Topics Covered</p>
+                
+              
+        
+        <!-- Structured YouTube Playlists Section -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-body">
+                <h3 class="fw-bold mb-4"><i class="fab fa-youtube me-2 text-danger"></i> Structured YouTube Playlists</h3>
+                <p class="text-muted mb-4">Follow these comprehensive playlists in order to master each DSA topic systematically.</p>
+                
+                <div class="row g-4">
+                    <!-- Basic -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-danger bg-opacity-10 text-danger rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">0. Basic Concepts</h6>
+                                        <small class="text-muted">Foundations</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Start with these fundamental concepts before diving into specific topics</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=1xNbjMdbjug&list=PLgUwDviBIf0oFON1SRGcMqMIhiZ4EXx_F" target="_blank" class="btn btn-sm btn-outline-danger">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-danger topic-badge">Step 0</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-4 rounded-3 shadow-sm bg-light">
-                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">1000+</h3>
-                        <p class="text-muted mb-0">Practice Problems</p>
+                    
+                    <!-- Array -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">1. Arrays</h6>
+                                        <small class="text-muted">First Data Structure</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Master array operations, sorting, searching, and common patterns</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=37E9ckMDdTk&list=PLgUwDviBIf0rENwdL0nEH0uGom9no0nyB" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-primary topic-badge">Step 1</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-4 rounded-3 shadow-sm bg-light">
-                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">85%</h3>
-                        <p class="text-muted mb-0">Success Rate</p>
+                    
+                    <!-- String -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">2. Strings</h6>
+                                        <small class="text-muted">Text Processing</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Learn string manipulation, pattern matching, and common algorithms</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=MwlXNPFLBzE&t=855s" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-success topic-badge">Step 2</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-4 rounded-3 shadow-sm bg-light">
-                        <h3 class="fw-bold mb-0" style="color: var(--primary-dark);">24/7</h3>
-                        <p class="text-muted mb-0">Support Available</p>
+                    
+                    <!-- Linked List -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">3. Linked Lists</h6>
+                                        <small class="text-muted">Dynamic Data Structure</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Understand singly/doubly linked lists, operations, and common problems</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=cg6JGiXhQ9c&list=PLgUwDviBIf0rAuz8tVcM0AymmhTRsfaLU" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-info topic-badge">Step 3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stack -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">4. Stacks</h6>
+                                        <small class="text-muted">LIFO Structure</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Learn stack operations, implementations, and applications</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=tqQ5fTamIN4&list=PLgUwDviBIf0pOd5zvVVSzgpo6BaCpHT9c" target="_blank" class="btn btn-sm btn-outline-warning">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-warning topic-badge">Step 4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Queue -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-secondary bg-opacity-10 text-secondary rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">5. Queues</h6>
+                                        <small class="text-muted">FIFO Structure</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Understand queue operations, implementations, and variations</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=va_6RmSrKCg&t=857s" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-secondary topic-badge">Step 5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recursion -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-danger bg-opacity-10 text-danger rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">6. Recursion</h6>
+                                        <small class="text-muted">Problem Solving Technique</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Master recursive thinking, base cases, and recursive patterns</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=yVdKa8dnKiE&list=PLgUwDviBIf0rGlzIn_7rsaR2FQ5e6ZOL9" target="_blank" class="btn btn-sm btn-outline-danger">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-danger topic-badge">Step 6</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tree -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">7. Trees</h6>
+                                        <small class="text-muted">Hierarchical Data</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Learn binary trees, traversals, BST, and tree algorithms</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=_ANrF3FJm7I&list=PLkjdNRgDmcc0Pom5erUBU4ZayeU9AyRRu" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-success topic-badge">Step 7</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Graph -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">8. Graphs</h6>
+                                        <small class="text-muted">Network Data</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Understand graph representations, traversals, and algorithms</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=59fUtYYz7ZU" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-primary topic-badge">Step 8</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- DP -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-info bg-opacity-10 text-info rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">9. Dynamic Programming</h6>
+                                        <small class="text-muted">Optimization Technique</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Master memoization, tabulation, and common DP patterns</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=Z8USYkiRvZw" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-info topic-badge">Step 9</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Searching & Sorting -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3">
+                                        <i class="fab fa-youtube"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">10. Searching & Sorting</h6>
+                                        <small class="text-muted">Fundamental Algorithms</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Learn various searching and sorting algorithms with implementations</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="https://www.youtube.com/watch?v=YJeoQBevNVo&list=PLDzeHZWIZsTp4pb_WBRahP1tnipLuX9qM" target="_blank" class="btn btn-sm btn-outline-warning">
+                                        <i class="fab fa-youtube me-1"></i> Watch Playlist
+                                    </a>
+                                    <span class="badge bg-warning topic-badge">Step 10</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -273,24 +539,5 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Add animation on scroll
-        document.addEventListener('DOMContentLoaded', function() {
-            const topicCards = document.querySelectorAll('.topic-card');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate__fadeInUp');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            topicCards.forEach(card => {
-                observer.observe(card);
-            });
-        });
-    </script>
 </body>
 </html>
