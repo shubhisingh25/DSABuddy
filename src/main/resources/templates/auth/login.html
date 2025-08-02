@@ -4,84 +4,145 @@
     <meta charset="UTF-8">
     <title>Login - DSA Buddy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --purple-light: #b185db;
+            --purple-medium: #9c64d4;
+            --purple-dark: #7e4caf;
+            --purple-darker: #5d3a8a;
+            --purple-bg: #f9f5ff;
+            --purple-gradient: linear-gradient(135deg, var(--purple-medium), var(--purple-dark));
+        }
+        
+        body {
+            background-color: var(--purple-bg);
+        }
+        
+        .bg-purple-light {
+            background-color: var(--purple-light);
+        }
+        
+        .bg-purple-gradient {
+            background: var(--purple-gradient);
+        }
+        
+        .text-purple {
+            color: var(--purple-dark);
+        }
+        
+        .btn-purple {
+            background-color: var(--purple-medium);
+            border-color: var(--purple-medium);
+            color: white;
+        }
+        
+        .btn-purple:hover {
+            background-color: var(--purple-darker);
+            border-color: var(--purple-darker);
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #f3e5ff, #d9b3ff);
+            border-radius: 0 0 1rem 1rem;
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--purple-medium);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(156, 100, 212, 0.2);
+        }
+        
+        .input-group-text {
+            background-color: rgba(158, 76, 175, 0.1);
+        }
+        
+        .form-control:focus {
+            border-color: var(--purple-light);
+            box-shadow: 0 0 0 0.25rem rgba(158, 76, 175, 0.25);
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
 <!-- Navbar -->
 <div th:replace="~{auth/navbar :: navbar}"></div>
 
-<!-- Main Container -->
-<div class="container py-5">
+<!-- Hero Section -->
+<div class="hero-section py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4 text-purple">Master DSA with DSA Buddy</h1>
+        <p class="lead text-muted">Your complete guide to Data Structures & Algorithms</p>
+    </div>
+</div>
+
+<!-- Login Form Section -->
+<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card shadow-lg">
+            <div class="card border-0 shadow-lg overflow-hidden">
                 <div class="row g-0">
                     <!-- Info Section -->
-                    <div class="col-lg-6 d-none d-lg-block bg-primary text-white p-5">
+                    <div class="col-lg-6 d-none d-lg-block bg-purple-gradient text-white p-5">
                         <div class="text-center mb-5">
                             <h2 class="fw-bold">Welcome to <span class="text-warning">DSA Buddy</span></h2>
                             <p class="lead">Master DSA with curated content, structured plans, and real interview prep.</p>
                         </div>
 
-                        <div class="bg-white bg-opacity-10 p-4 rounded-3 mb-4">
+                        <div class="feature-card bg-white bg-opacity-10 p-4 rounded-3 mb-4">
                             <div class="text-center text-warning mb-3">
-                                <i class="fas fa-laptop-code fa-2x"></i>
+                                <i class="fas fa-laptop-code fa-3x"></i>
                             </div>
                             <h4 class="text-center">Practice Questions</h4>
-                            <p class="text-center mb-0">Solve real DSA problems from top companies. Get better with daily practice sets.</p>
+                            <p class="text-center mb-0">Solve real DSA problems from top companies.</p>
                         </div>
 
-                        <div class="bg-white bg-opacity-10 p-4 rounded-3 mb-4">
+                        <div class="feature-card bg-white bg-opacity-10 p-4 rounded-3">
                             <div class="text-center text-warning mb-3">
-                                <i class="fas fa-road fa-2x"></i>
+                                <i class="fas fa-road fa-3x"></i>
                             </div>
                             <h4 class="text-center">Structured Roadmap</h4>
-                            <p class="text-center mb-0">Progress through beginner to advanced topics with guided paths.</p>
-                        </div>
-
-                        <div class="bg-white bg-opacity-10 p-4 rounded-3">
-                            <div class="text-center text-warning mb-3">
-                                <i class="fas fa-graduation-cap fa-2x"></i>
-                            </div>
-                            <h4 class="text-center">Comprehensive Resources</h4>
-                            <p class="text-center mb-0">Access video tutorials, cheat sheets, and key concepts in one place.</p>
+                            <p class="text-center mb-0">Progress through beginner to advanced topics.</p>
                         </div>
                     </div>
 
                     <!-- Login Form -->
-                    <div class="col-lg-6 p-5">
+                    <div class="col-lg-6 p-5 bg-white">
                         <div class="text-center mb-4">
-                            <h2 class="fw-bold text-primary">Welcome Back</h2>
-                            <p class="text-muted">Login to continue to DSA Buddy</p>
+                            <h2 class="fw-bold text-purple">Welcome Back</h2>
+                            <p class="text-muted">Login to continue your DSA journey</p>
                         </div>
 
                         <!-- Flash Messages -->
                         <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert" th:text="${error}">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                         <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert" th:text="${message}">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
 
-                        <!-- Login Form -->
                         <form th:action="@{/dologin}" method="post">
                             <div class="mb-4">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">Email Address</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fas fa-envelope text-muted"></i></span>
-                                    <input type="email" name="username" class="form-control" placeholder="Enter your email" required>
+                                    <span class="input-group-text"><i class="fas fa-envelope text-purple"></i></span>
+                                    <input type="email" name="username" class="form-control" placeholder="your@email.com" required>
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Password</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-lock text-purple"></i></span>
                                     <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
                                 </div>
                             </div>
                             <div class="d-grid mb-3">
-                                <button class="btn btn-primary btn-lg">
+                                <button class="btn btn-purple btn-lg py-3">
                                     <i class="fas fa-sign-in-alt me-2"></i> Login
                                 </button>
                             </div>
@@ -89,7 +150,7 @@
 
                         <div class="text-center">
                             <p class="text-muted mb-0">Don't have an account?</p>
-                            <a href="/register" class="text-decoration-none fw-bold text-primary">Register here</a>
+                            <a href="/register" class="text-decoration-none fw-bold text-purple">Register here</a>
                         </div>
                     </div>
                 </div>
@@ -99,30 +160,8 @@
 </div>
 
 <!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                <h5 class="mb-3">DSA Buddy</h5>
-                <p class="mb-0">Your companion in mastering Data Structures and Algorithms.</p>
-            </div>
-            <div class="col-md-6 text-center text-md-end">
-                <h5 class="mb-3">Made By Shubhi Singh</h5>
-                <a href="https://www.linkedin.com/in/shubhi" class="text-white mx-2"><i class="fab fa-linkedin fa-lg"></i></a>
-                <a href="https://github.com/shubhi" class="text-white mx-5"><i class="fab fa-github fa-lg"></i></a>
-                <a href="https://twitter.com/shubhi" class="text-white mx-5 mt-5"><i class="fab fa-twitter fa-lg"></i></a>
-            </div>
-        </div>
-        <hr class="my-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <p class="mb-0 small">&copy; 2025 DSA Buddy. All rights reserved.</p>
-            </div>
-        </div>
-    </div>
-</footer>
+<div th:replace="~{auth/navbar :: footer}"></div>
 
-<!-- Bootstrap & FontAwesome JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
